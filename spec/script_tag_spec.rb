@@ -146,9 +146,19 @@ describe IntercomRails::ScriptTag do
       IntercomRails.config.inbox.custom_activator = '.intercom'
       expect(ScriptTag.new.intercom_settings['widget']).to eq({'activator' => '.intercom'})
     end
-    it 'knows about :hide_default_launcher' do
+    it 'accepts a Proc or boolean for :hide_default_launcher' do
       IntercomRails.config.hide_default_launcher = true
       expect(ScriptTag.new.intercom_settings['hide_default_launcher']).to eq(true)
+
+      IntercomRails.config.hide_default_launcher = Proc.new {|controller| controller.hide_default_launcher?}
+      controller = Object.new
+      controller.instance_eval do
+        def hide_default_launcher?
+          false
+        end
+      end
+      script_tag = ScriptTag.new(:controller => controller)
+      expect(script_tag.intercom_settings['hide_default_launcher']).to eq(false)
     end
   end
 

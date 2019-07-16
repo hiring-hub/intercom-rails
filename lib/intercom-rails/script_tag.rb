@@ -68,7 +68,12 @@ module IntercomRails
       hsh[:session_duration] = @session_duration if @session_duration.present?
       hsh[:widget] = widget_options if widget_options.present?
       hsh[:company] = company_details if company_details.present?
-      hsh[:hide_default_launcher] = Config.hide_default_launcher if Config.hide_default_launcher
+      hide_default_launcher = Config.hide_default_launcher if Config.hide_default_launcher
+      hsh[:hide_default_launcher] = if hide_default_launcher.respond_to?(:call)
+                                      hide_default_launcher.call(controller)
+                                    else
+                                      hide_default_launcher
+                                    end
       hsh
     end
 

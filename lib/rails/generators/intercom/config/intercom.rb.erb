@@ -126,5 +126,7 @@ IntercomRails.config do |config|
   # config.inbox.custom_activator = '.intercom'
   #
   # If you'd like to hide default launcher button uncomment this line
+  # alternatively provide a Proc that accepts the controller as an argument if you wish to determine this at runtime
+  # e.g: Proc.new { |controller| controller.hide_default_launcher? }
   # config.hide_default_launcher = true
 end
